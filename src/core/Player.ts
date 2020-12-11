@@ -2,12 +2,11 @@ import Card from "./Card";
 
 class Player {
   name: string;
-  score: number;
+  score: number = 0;
   hand: Card[] = [];
 
-  constructor(name: string, score: number) {
+  constructor(name: string) {
     this.name = name;
-    this.score = score;
   }
 
   public giveCard(card: Card) {

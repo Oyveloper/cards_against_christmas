@@ -1,0 +1,26 @@
+.GameScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#table {
+  flex-grow: 1;
+}
+
+#player-hand {
+  height: 150px;
+  background-color: #eef;
+  padding: 0 20px 0 20px;
+
+}
+
+#player-hand-card-container {
+
+  display: flex;
+  flex-direction: row;
+  top: -30px;
+  position: relative;
+
+}
+
