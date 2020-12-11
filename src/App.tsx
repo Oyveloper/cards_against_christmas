@@ -14,7 +14,7 @@ function App() {
     players.push(new Player(`Player${i}`));
   }
 
-  for (var i = 0; i < 30; i++) {
+  for (i = 0; i < 30; i++) {
     deck.push(new Card(CardType.BLACK, `haha så morsomt, ${i}`));
   }
 
