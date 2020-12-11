@@ -1,26 +1,25 @@
-import Card from "./Card";
+import Card, { CardType } from "./Card";
 import Player from "./Player";
 
 export default class Game {
   id: string;
   players: Player[];
-  deck: Card[];
+  userHand: Card[] = [];
   currentJudge: Player | null = null;
 
-  constructor(id: string, players: Player[], deck: Card[]) {
+  /**
+   * @param id - the unique game id
+   * @param players - a list of all players involved, including the local user
+   */
+  constructor(id: string, players: Player[]) {
     this.id = id;
     this.players = players;
-    this.deck = deck;
   }
 
-  public dealCards() {
-    for (var i = 0; i < 7; i++) {
-      this.players.forEach((player) => {
-        let card = this.deck.pop();
-        if (!(typeof card === "undefined")) {
-          player.giveCard(card);
-        }
-      });
-    }
+  /**
+   * Draws a card for the local user and adds it to their hand
+   */
+  public drawCard() {
+    this.userHand.push(new Card(CardType.WHITE, "some random text"));
   }
 }

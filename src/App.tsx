@@ -8,19 +8,16 @@ import GameScreen from "./Screens/GameScreen";
 
 function App() {
   let players: Player[] = [];
-  let deck: Card[] = [];
 
   for (var i = 0; i < 4; i++) {
     players.push(new Player(`Player${i}`));
   }
 
-  for (i = 0; i < 30; i++) {
-    deck.push(new Card(CardType.BLACK, `haha så morsomt, ${i}`));
+  const game: Game = new Game("123", players);
+
+  for (i = 0; i < 7; i++) {
+    game.drawCard();
   }
-
-  const game: Game = new Game("123", players, deck);
-
-  game.dealCards();
 
   return (
     <div className="App">

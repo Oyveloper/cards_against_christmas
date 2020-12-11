@@ -9,11 +9,7 @@ type GameScreenProps = {
 };
 
 export default function GameScreen({ game }: GameScreenProps) {
-  if (typeof game === "undefined") {
-    return <div>No game!</div>;
-  }
-
-  const playerHand = game.players[0].hand.map((card, i) => (
+  const playerHand = game.userHand.map((card, i) => (
     <CardDisplay card={card} key={`hand-card-${i}`} />
   ));
 
