@@ -4,6 +4,13 @@
   height: 100%;
 }
 
+#oponents {
+  display: flex;
+  flex-direction: row;
+  background-color: #eef;
+  padding: 10px;
+}
+
 #table {
   flex-grow: 1;
 }

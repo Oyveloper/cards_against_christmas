@@ -13,11 +13,13 @@ function App() {
     players.push(new Player(`Player${i}`));
   }
 
-  const game: Game = new Game("123", players);
+  const game: Game = new Game("123", players, new Player("local"));
 
   for (i = 0; i < 7; i++) {
     game.drawCard();
   }
+
+  game.setJudge(game.players[0]);
 
   return (
     <div className="App">
