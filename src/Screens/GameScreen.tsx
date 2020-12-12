@@ -1,5 +1,6 @@
 import React from "react";
 import CardDisplay from "../components/CardDisplay";
+import PlayerAvatar from "../components/PlayerAvatar";
 import Game from "../core/Game";
 
 import "./GameScreen.css";
@@ -13,11 +14,13 @@ export default function GameScreen({ game }: GameScreenProps) {
     <CardDisplay card={card} key={`hand-card-${i}`} />
   ));
 
-  console.log(game.players);
+  const oponents = game.players.map((player, i) => (
+    <PlayerAvatar player={player} key={`oponent-${i}`} />
+  ));
 
   return (
     <div className="GameScreen">
-      <div id="oponents"></div>
+      <div id="oponents">{oponents}</div>
       <div id="table"></div>
       <div id="player-hand">
         <div id="player-hand-card-container">{playerHand}</div>
