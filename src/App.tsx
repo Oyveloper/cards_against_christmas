@@ -20,6 +20,7 @@ function App() {
   }
 
   game.setJudge(game.players[0]);
+  game.drawBlackCard();
 
   return (
     <div className="App">

@@ -17,7 +17,7 @@
   font-weight: bold;
 }
 
-.card:hover {
+.card-1:hover {
   transform: scale(1.1);
   -webkit-transform: scale(1.1);
   -moz-transform: scale(1.1);

@@ -18,10 +18,15 @@ export default function GameScreen({ game }: GameScreenProps) {
     <PlayerAvatar player={player} key={`oponent-${i}`} />
   ));
 
+  const blackCard =
+    game.currentBlackCard === null ? null : (
+      <CardDisplay card={game.currentBlackCard} />
+    );
+
   return (
     <div className="GameScreen">
       <div id="oponents">{oponents}</div>
-      <div id="table"></div>
+      <div id="table">{blackCard}</div>
       <div id="player-hand">
         <div id="player-hand-card-container">{playerHand}</div>
       </div>
