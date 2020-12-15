@@ -8,5 +8,5 @@ type CardDisplayProps = {
 };
 
 export default function CardDisplay({ card }: CardDisplayProps) {
-  return <div className={`card card-${card.type.toString()}`}>{card.text}</div>;
+  return <div className={`card card-${typeof card}`}>{card.text}</div>;
 }

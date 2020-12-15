@@ -25,3 +25,12 @@ export interface Card {
 export interface BlackCard extends Card {
   numberMissing: number;
 }
+
+export interface GameState {
+  id: string;
+  players: Player[];
+  userHand: Card[];
+  rounds: Round[];
+  currentRound: Round | undefined;
+  loading: boolean;
+}

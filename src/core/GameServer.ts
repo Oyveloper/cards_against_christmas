@@ -1,12 +1,13 @@
-import { Card } from "../types";
+import { useReducer } from "react";
+import { Card, GameState } from "../types";
 
 export class GameServer {
   id: string;
-  updateMethod: (args: any) => void;
+  dispatch: React.Dispatch<GameStateAction>;
 
-  constructor(id: string, updateMethod: (args: any) => void) {
+  constructor(id: string, dispatch: React.Dispatch<GameStateAction>) {
     this.id = id;
-    this.updateMethod = updateMethod;
+    this.dispatch = dispatch;
   }
 
   connect() {}
@@ -32,14 +33,42 @@ export class GameServer {
   onGameOver() {}
 }
 
-export default function useGameServer(
-  id: string,
-  updateGame: (args: any) => void
-) {
-  let server = new GameServer(id, updateGame);
-  const setGameServer = (newServer: GameServer) => (server = newServer);
+enum gameStateActionType {
+  GAME_START,
+  GAME_OVER,
+  NEW_ROUND,
+  PLAYER_CHNAGE,
+  HAND_CHNAGE,
+  PLAYED_CARD_CHANGE,
+  LOADING_CHANGE,
+}
+
+type GameStateAction = {
+  type: string;
+};
+
+function gameStateReducer(
+  state: GameState,
+  action: GameStateAction
+): GameState {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+export default function useGameServer(id: string): [GameServer, GameState] {
+  const [gameState, dispatch] = useReducer(gameStateReducer, {
+    id: id,
+    players: [],
+    userHand: [],
+    rounds: [],
+    currentRound: undefined,
+    loading: true,
+  });
+  let server = new GameServer(id, dispatch);
 
   server.connect();
 
-  return [server, setGameServer];
+  return [server, gameState];
 }

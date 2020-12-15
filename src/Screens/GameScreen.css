@@ -4,6 +4,11 @@
   height: 100%;
 }
 
+.GameScreen-loading {
+  justify-content: center;
+  align-items: center;
+}
+
 #oponents {
   display: flex;
   flex-direction: row;

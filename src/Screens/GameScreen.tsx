@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import CardDisplay from "../components/CardDisplay";
 import PlayerAvatar from "../components/PlayerAvatar";
-import Game from "../core/Game";
+import useGameServer from "../core/GameServer";
+import { Card, Game } from "../types";
 
 import "./GameScreen.css";
 
 type GameScreenProps = {
-  game: Game;
+  id: string;
+  playerName: string;
 };
 
-export default function GameScreen({ game }: GameScreenProps) {
-  const playerHand = game.userHand.map((card, i) => (
+export default function GameScreen({ id, playerName }: GameScreenProps) {
+  const [gameServer, gameState] = useGameServer(id);
+
+  if (gameState.loading) {
+    return (
+      <div className="GameScreen GameScreen-loading">
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
+
+  const playerHand = gameState.userHand.map((card, i) => (
     <CardDisplay card={card} key={`hand-card-${i}`} />
   ));
 
-  const oponents = game.players.map((player, i) => (
+  const oponents = gameState.players.map((player, i) => (
     <PlayerAvatar player={player} key={`oponent-${i}`} />
   ));
 
   const blackCard =
-    game.currentBlackCard === null ? null : (
-      <CardDisplay card={game.currentBlackCard} />
+    gameState.currentRound === undefined ? null : (
+      <CardDisplay card={gameState.currentRound.blackCard} />
     );
 
   return (
