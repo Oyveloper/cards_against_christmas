@@ -35,7 +35,9 @@ export default function GameScreen({ id, playerName }: GameScreenProps) {
     <div className="GameScreen">
       <div id="oponents">
         {oponents}
-        <button onClick={() => gameServer.drawCard()}>Draw</button>
+        <button onClick={() => gameServer.drawCard(gameState.userHand)}>
+          Draw
+        </button>
       </div>
       <div id="table">{blackCard}</div>
       <PlayerHand hand={gameState.userHand} />
