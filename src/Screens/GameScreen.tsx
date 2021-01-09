@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import CardDisplay from "../components/CardDisplay";
-import PlayerAvatar from "../components/PlayerAvatar";
+import React from "react";
+import { BlackCardDisplay } from "../components/CardDisplay/CardDisplay";
+import PlayerAvatar from "../components/PlayerAvatar/PlayerAvatar";
+import PlayerHand from "../components/PlayerHand/PlayerHand";
 import useGameServer from "../core/GameServer";
-import { Card, Game } from "../types";
 
 import "./GameScreen.css";
 
@@ -22,26 +22,23 @@ export default function GameScreen({ id, playerName }: GameScreenProps) {
     );
   }
 
-  const playerHand = gameState.userHand.map((card, i) => (
-    <CardDisplay card={card} key={`hand-card-${i}`} />
-  ));
-
   const oponents = gameState.players.map((player, i) => (
     <PlayerAvatar player={player} key={`oponent-${i}`} />
   ));
 
   const blackCard =
     gameState.currentRound === undefined ? null : (
-      <CardDisplay card={gameState.currentRound.blackCard} />
+      <BlackCardDisplay card={gameState.currentRound.blackCard} />
     );
 
   return (
     <div className="GameScreen">
-      <div id="oponents">{oponents}</div>
-      <div id="table">{blackCard}</div>
-      <div id="player-hand">
-        <div id="player-hand-card-container">{playerHand}</div>
+      <div id="oponents">
+        {oponents}
+        <button onClick={() => gameServer.drawCard()}>Draw</button>
       </div>
+      <div id="table">{blackCard}</div>
+      <PlayerHand hand={gameState.userHand} />
     </div>
   );
 }

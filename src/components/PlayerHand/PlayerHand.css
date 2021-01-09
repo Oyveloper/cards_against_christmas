@@ -1,0 +1,15 @@
+.player-hand {
+  height: 150px;
+  background-color: #eef;
+  padding: 0 20px 0 20px;
+
+}
+
+.player-hand-card-container {
+
+  display: flex;
+  flex-direction: row;
+  top: -30px;
+  position: relative;
+
+}

@@ -1,13 +1,25 @@
-import { useReducer } from "react";
-import { Card, GameState } from "../types";
+import { useReducer, useState } from "react";
+import { Card, Game, GameState, Player } from "../types";
 
 export class GameServer {
   id: string;
-  dispatch: React.Dispatch<GameStateAction>;
+  dispatch: React.Dispatch<{
+    type: string;
+    data: object;
+  }>;
+  gameState: GameState;
 
-  constructor(id: string, dispatch: React.Dispatch<GameStateAction>) {
+  constructor(
+    id: string,
+    dispatch: React.Dispatch<{
+      type: string;
+      data: object;
+    }>,
+    gameState: GameState
+  ) {
     this.id = id;
     this.dispatch = dispatch;
+    this.gameState = gameState;
   }
 
   connect() {}
@@ -16,8 +28,11 @@ export class GameServer {
 
   chooseCard(card: Card) {}
 
-  drawCard(): Card {
-    return { text: "hell", id: "12" };
+  drawCard() {
+    this.gameState.userHand.push({ text: "mer", id: "qwe" });
+    console.log(this.gameState.userHand);
+
+    this.dispatch({ type: "noe", data: { userHand: this.gameState.userHand } });
   }
 
   onNewRound() {}
@@ -33,40 +48,47 @@ export class GameServer {
   onGameOver() {}
 }
 
-enum gameStateActionType {
-  GAME_START,
-  GAME_OVER,
-  NEW_ROUND,
-  PLAYER_CHNAGE,
-  HAND_CHNAGE,
-  PLAYED_CARD_CHANGE,
-  LOADING_CHANGE,
-}
-
-type GameStateAction = {
-  type: string;
-};
-
 function gameStateReducer(
   state: GameState,
-  action: GameStateAction
+  action: { type: string; data: object }
 ): GameState {
-  switch (action.type) {
-    default:
-      return state;
-  }
+  return { ...state, ...action.data };
+}
+
+export enum GameServerActions {
+  DRAW_CARD,
+  NEW_ROUND,
+  PLAYER_CHANGE,
+  ROUND_WON,
+  CARD_PLAYED,
+  GAME_START,
+  GAME_OVER,
+  LOADING_DONE,
 }
 
 export default function useGameServer(id: string): [GameServer, GameState] {
   const [gameState, dispatch] = useReducer(gameStateReducer, {
     id: id,
-    players: [],
-    userHand: [],
+    players: [
+      { name: "noe", score: 0, isJudge: true },
+      { name: "annet", score: 0, isJudge: false },
+      { name: "du", score: 0, isJudge: false },
+    ],
+    userHand: [
+      { text: "oisann", id: "123" },
+      { text: "oisann", id: "123" },
+      { text: "oisann", id: "123" },
+      { text: "oisann", id: "123" },
+    ],
     rounds: [],
-    currentRound: undefined,
-    loading: true,
+    currentRound: {
+      num: 1,
+      judge: { name: "noe", score: 0, isJudge: true },
+      blackCard: { text: "noe ___", numberMissing: 1, id: "123" },
+    },
+    loading: false,
   });
-  let server = new GameServer(id, dispatch);
+  let [server, setServer] = useState(new GameServer(id, dispatch, gameState));
 
   server.connect();
 

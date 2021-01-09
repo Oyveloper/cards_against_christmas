@@ -2,7 +2,7 @@ import React from "react";
 import { AccountCircle } from "@material-ui/icons";
 
 import "./PlayerAvatar.css";
-import { Player } from "../types";
+import { Player } from "../../types";
 
 type PlayerAvatarProps = {
   player: Player;
