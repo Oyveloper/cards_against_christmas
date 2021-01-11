@@ -8,7 +8,6 @@ export interface Game {
 export interface Player {
   name: string;
   score: number;
-  isJudge: boolean;
 }
 
 export interface Round {
@@ -31,6 +30,19 @@ export interface GameState {
   players: Player[];
   userHand: Card[];
   rounds: Round[];
-  currentRound: Round | undefined;
+  currentRound: Round | null;
   loading: boolean;
 }
+
+export type GameServerResponse = {
+  status: string;
+  reason: string;
+  data: any;
+};
+
+export type GameUpdate = {
+  gameId: string;
+  players: Player[];
+  rounds: Round[];
+  currentRound: Round;
+};

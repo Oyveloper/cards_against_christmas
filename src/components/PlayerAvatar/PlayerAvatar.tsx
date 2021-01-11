@@ -9,11 +9,10 @@ type PlayerAvatarProps = {
 };
 
 export default function PlayerAvatar({ player }: PlayerAvatarProps) {
+  console.log(player);
+
   return (
-    <div
-      className={`PlayerAvatar ${player.isJudge ? "PlayerAvatarActive" : ""}`}
-      title={player.name}
-    >
+    <div title={player.name} className="PlayerAvatar">
       <AccountCircle fontSize="large" />
       <p>{player.name}</p>
     </div>
