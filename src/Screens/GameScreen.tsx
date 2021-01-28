@@ -1,62 +1,35 @@
-import React, { useState } from "react";
-import { RouteComponentProps } from "@reach/router";
+import React, { useContext, useEffect, useState } from "react";
+import { navigate, RouteComponentProps } from "@reach/router";
 
 import "./GameScreen.css";
 import GameDisplay from "../components/GameDisplay/GameDisplay";
-import { gameExists, isPlayerNameTaken } from "../core/GameInfo";
+import { JoinGameContext } from "../App";
 
 export default function GameScreen(props: RouteComponentProps) {
   const [playerName, setPlayerName] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
-  const [gameJoined, setGameJoined] = useState(false);
-  const [error, setError] = useState("");
+  const [gameReady, setGameReady] = useState(false);
+  const joinGameData = useContext(JoinGameContext);
 
-  const joinGame = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!(await gameExists(gameId))) {
-      setError("The game does not exist");
-    } else if (await isPlayerNameTaken(playerName, gameId)) {
-      setError("The username is taken");
-    } else {
-      setError("");
-      setGameJoined(true);
+  useEffect(() => {
+    try {
+      const gameInfo = joinGameData.joinGameData;
+      if (gameInfo.gameId === "" || gameInfo.playerName === "") {
+        throw new Error("No game id");
+      }
+
+      setPlayerName(gameInfo.playerName);
+      setGameId(gameInfo.gameId);
+      setGameReady(true);
+    } catch (e) {
+      console.log(e);
+      navigate("/joinGame");
     }
-  };
+  }, [joinGameData]);
 
-  if (!gameJoined) {
-    return (
-      <div className="GameScreen">
-        <form action="" id="join-game-form" onSubmit={joinGame}>
-          <h1>Join a game</h1>
-          <p style={{ color: "red" }}>{error}</p>
-          <section id="gameIdSection" className="game-form-section">
-            <label htmlFor="gameId">Game ID</label>
-            <input
-              type="text"
-              name="gameId"
-              id="gameId"
-              value={gameId}
-              onChange={(e) => setGameId(e.target.value)}
-            />
-          </section>
-          <section id="playerNameSection" className="game-form-section">
-            <label htmlFor="playerName">Player Name</label>
-            <input
-              type="text"
-              name="playerName"
-              id="playerName"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-            />
-          </section>
-
-          <button className="main" type="submit">
-            Join game
-          </button>
-        </form>
-      </div>
-    );
-  } else {
-    return <GameDisplay id={gameId} playerName={playerName} />;
-  }
+  return gameReady ? (
+    <GameDisplay id={gameId} playerName={playerName} />
+  ) : (
+    <h2>Loading...</h2>
+  );
 }

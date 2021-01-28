@@ -1,25 +1,38 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./App.css";
 
 import GameScreen from "./Screens/GameScreen";
 
-import { Router, RouteComponentProps, Link } from "@reach/router";
+import { Router } from "@reach/router";
+import HomeScreen from "./Screens/HomeScreen";
+import CreateGameScreen from "./Screens/CreateGameScreen";
+import JoinGameScreen from "./Screens/JoinGameScreen";
+import { JoinGameData } from "./types";
 
-const Home = (props: RouteComponentProps) => (
-  <div>
-    <h1>Cards against Christmas</h1>
-    <Link to="/game">Game</Link>
-  </div>
-);
+const defaultJoinGameData: JoinGameData = {
+  gameId: "",
+  playerName: "",
+};
+export const JoinGameContext = React.createContext({
+  joinGameData: defaultJoinGameData,
+  setJoinGameData: (data: JoinGameData) => {},
+});
 
 function App() {
+  const [joinGameData, setJoinGameData] = useState(defaultJoinGameData);
   return (
-    <div className="App">
-      <Router style={{ height: "100%" }}>
-        <Home path="/" />
-        <GameScreen path="/game" />
-      </Router>
-    </div>
+    <JoinGameContext.Provider
+      value={{ joinGameData: joinGameData, setJoinGameData: setJoinGameData }}
+    >
+      <div className="App">
+        <Router style={{ height: "100%" }}>
+          <HomeScreen path="/" />
+          <GameScreen path="/game" />
+          <CreateGameScreen path="/createGame" />
+          <JoinGameScreen path="/joinGame" />
+        </Router>
+      </div>
+    </JoinGameContext.Provider>
   );
 }
 

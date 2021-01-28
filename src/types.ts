@@ -46,3 +46,8 @@ export type GameUpdate = {
   rounds: Round[];
   currentRound: Round;
 };
+
+export type JoinGameData = {
+  gameId: string;
+  playerName: string;
+};

@@ -35,7 +35,9 @@ export default function GameDisplay({ id, playerName }: GameScreenProps) {
 
   return (
     <div className="GameDisplay">
-      <div id="oponents">{oponents}</div>
+      <div id="oponents">
+        {oponents} {id}
+      </div>
       <div id="table">{blackCard}</div>
       <PlayerHand hand={gameState.userHand} />
     </div>
