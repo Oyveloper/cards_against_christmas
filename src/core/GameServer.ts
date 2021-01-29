@@ -72,9 +72,6 @@ export class GameServer {
         type: GameServerActions.GAME_UPDATE,
         data: {
           players: gameUpdate.players,
-          userHand: gameUpdate.players.filter(
-            (p) => p.name === this.playerName
-          ),
           rounds: gameUpdate.rounds,
           currentRound: gameUpdate.currentRound,
         },

@@ -8,6 +8,7 @@ export interface Game {
 export interface Player {
   name: string;
   score: number;
+  isHost: boolean;
 }
 
 export interface Round {

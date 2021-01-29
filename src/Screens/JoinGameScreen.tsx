@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { RouteComponentProps, navigate } from "@reach/router";
 import { gameExists, isPlayerNameTaken } from "../core/GameInfo";
+import { JoinGameContext } from "../App";
 
 export default function JoinGameScreen(props: RouteComponentProps) {
   const [playerName, setPlayerName] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
   const [error, setError] = useState("");
+  const { setJoinGameData } = useContext(JoinGameContext);
 
   const submitJoinGame = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let foundError = false;
     if (!(await gameExists(gameId))) {
       setError("The game does not exist");
+      foundError = true;
     } else if (await isPlayerNameTaken(playerName, gameId)) {
       setError("The username is taken");
+      foundError = true;
     } else {
       setError("");
+      foundError = false;
     }
 
-    navigate("/game", { state: { gameId: gameId, playername: playerName } });
+    if (!foundError) {
+      setJoinGameData({ gameId: gameId, playerName: playerName });
+
+      navigate("/game");
+    }
   };
 
   return (
