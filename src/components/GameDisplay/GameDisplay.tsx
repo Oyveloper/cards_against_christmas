@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BlackCardDisplay } from "../CardDisplay/CardDisplay";
-import PlayerAvatar from "../PlayerAvatar/PlayerAvatar";
 import PlayerHand from "../PlayerHand/PlayerHand";
 import useGameServer from "../../core/GameServer";
 

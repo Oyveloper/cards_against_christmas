@@ -5,7 +5,7 @@ import { JoinGameContext } from "../App";
 
 export default function CreateGameScreen(props: RouteComponentProps) {
   const [playerName, setPlayerName] = useState<string>("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const { setJoinGameData } = useContext(JoinGameContext);
   const navigate = useNavigate();
 
