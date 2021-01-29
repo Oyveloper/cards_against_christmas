@@ -9,3 +9,33 @@ body, html, #root {
   width: 100%;
   height: 100%;
 }
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+
+  border-width: 1px;
+  width: 100%;
+}
+
+button.main {
+  background-color: #00bbff;
+  color: white;
+  border-color: #0e8ad7;
+}

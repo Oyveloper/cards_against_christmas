@@ -1,38 +1,93 @@
-import { useReducer, useState } from "react";
-import { Card, Game, GameState, Player } from "../types";
+import { CompatClient, Stomp } from "@stomp/stompjs";
+import { useEffect, useReducer, useState } from "react";
+import { Card, GameServerResponse, GameState, GameUpdate } from "../types";
+import SockJS from "sockjs-client";
+
+export enum GameServerActions {
+  DRAW_CARD,
+  NEW_ROUND,
+  PLAYER_CHANGE,
+  ROUND_WON,
+  CARD_PLAYED,
+  GAME_START,
+  GAME_OVER,
+  LOADING_DONE,
+  GAME_UPDATE,
+}
 
 export class GameServer {
   id: string;
   dispatch: React.Dispatch<{
-    type: string;
+    type: GameServerActions;
     data: object;
   }>;
-  gameState: GameState;
+
+  serverURL: string = "http://localhost:8080/ws";
+  stompClient: CompatClient | undefined;
+  playerName: string;
 
   constructor(
     id: string,
     dispatch: React.Dispatch<{
-      type: string;
+      type: GameServerActions;
       data: object;
     }>,
-    gameState: GameState
+    playerName: string
   ) {
     this.id = id;
     this.dispatch = dispatch;
-    this.gameState = gameState;
+    this.playerName = playerName;
   }
 
-  connect() {}
+  connect() {
+    let socket = new SockJS(this.serverURL);
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.connect({}, () => {
+      if (this.stompClient !== undefined && this.stompClient.connected) {
+        this.dispatch({
+          type: GameServerActions.LOADING_DONE,
+          data: { loading: false },
+        });
+        this.stompClient.subscribe(
+          `/topic/GameUpdate/${this.id}`,
+          this.onGameInfo.bind(this)
+        );
+        this.stompClient.send(
+          `/app/joinGame/${this.id}`,
+          undefined,
+          this.playerName
+        );
+      }
+    });
+  }
+
+  onGameInfo(rawResponse: any) {
+    let response: GameServerResponse = JSON.parse(rawResponse.body);
+
+    if (response.status === "OK") {
+      let gameUpdate: GameUpdate = response.data;
+      console.log(gameUpdate);
+
+      this.dispatch({
+        type: GameServerActions.GAME_UPDATE,
+        data: {
+          players: gameUpdate.players,
+          rounds: gameUpdate.rounds,
+          currentRound: gameUpdate.currentRound,
+        },
+      });
+    }
+  }
 
   playCard(card: Card) {}
 
   chooseCard(card: Card) {}
 
-  drawCard() {
-    this.gameState.userHand.push({ text: "mer", id: "qwe" });
-    console.log(this.gameState.userHand);
-
-    this.dispatch({ type: "noe", data: { userHand: this.gameState.userHand } });
+  drawCard(currentHand: Card[]) {
+    this.dispatch({
+      type: GameServerActions.DRAW_CARD,
+      data: { userHand: [...currentHand, { text: "mer", id: "qwe" }] },
+    });
   }
 
   onNewRound() {}
@@ -50,47 +105,27 @@ export class GameServer {
 
 function gameStateReducer(
   state: GameState,
-  action: { type: string; data: object }
+  action: { type: GameServerActions; data: object }
 ): GameState {
   return { ...state, ...action.data };
 }
 
-export enum GameServerActions {
-  DRAW_CARD,
-  NEW_ROUND,
-  PLAYER_CHANGE,
-  ROUND_WON,
-  CARD_PLAYED,
-  GAME_START,
-  GAME_OVER,
-  LOADING_DONE,
-}
-
-export default function useGameServer(id: string): [GameServer, GameState] {
+export default function useGameServer(
+  id: string,
+  playerName: string
+): [GameServer, GameState] {
   const [gameState, dispatch] = useReducer(gameStateReducer, {
     id: id,
-    players: [
-      { name: "noe", score: 0, isJudge: true },
-      { name: "annet", score: 0, isJudge: false },
-      { name: "du", score: 0, isJudge: false },
-    ],
-    userHand: [
-      { text: "oisann", id: "123" },
-      { text: "oisann", id: "123" },
-      { text: "oisann", id: "123" },
-      { text: "oisann", id: "123" },
-    ],
+    players: [],
+    userHand: [],
     rounds: [],
-    currentRound: {
-      num: 1,
-      judge: { name: "noe", score: 0, isJudge: true },
-      blackCard: { text: "noe ___", numberMissing: 1, id: "123" },
-    },
-    loading: false,
+    currentRound: null,
+    loading: true,
   });
-  let [server, setServer] = useState(new GameServer(id, dispatch, gameState));
-
-  server.connect();
+  const [server] = useState(new GameServer(id, dispatch, playerName));
+  useEffect(() => {
+    server.connect();
+  }, [server]);
 
   return [server, gameState];
 }

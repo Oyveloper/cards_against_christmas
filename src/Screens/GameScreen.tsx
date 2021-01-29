@@ -1,44 +1,35 @@
-import React from "react";
-import { BlackCardDisplay } from "../components/CardDisplay/CardDisplay";
-import PlayerAvatar from "../components/PlayerAvatar/PlayerAvatar";
-import PlayerHand from "../components/PlayerHand/PlayerHand";
-import useGameServer from "../core/GameServer";
+import React, { useContext, useEffect, useState } from "react";
+import { navigate, RouteComponentProps } from "@reach/router";
 
 import "./GameScreen.css";
+import GameDisplay from "../components/GameDisplay/GameDisplay";
+import { JoinGameContext } from "../App";
 
-type GameScreenProps = {
-  id: string;
-  playerName: string;
-};
+export default function GameScreen(props: RouteComponentProps) {
+  const [playerName, setPlayerName] = useState<string>("");
+  const [gameId, setGameId] = useState<string>("");
+  const [gameReady, setGameReady] = useState(false);
+  const joinGameData = useContext(JoinGameContext);
 
-export default function GameScreen({ id, playerName }: GameScreenProps) {
-  const [gameServer, gameState] = useGameServer(id);
+  useEffect(() => {
+    try {
+      const gameInfo = joinGameData.joinGameData;
+      if (gameInfo.gameId === "" || gameInfo.playerName === "") {
+        throw new Error("No game id");
+      }
 
-  if (gameState.loading) {
-    return (
-      <div className="GameScreen GameScreen-loading">
-        <h2>Loading...</h2>
-      </div>
-    );
-  }
+      setPlayerName(gameInfo.playerName);
+      setGameId(gameInfo.gameId);
+      setGameReady(true);
+    } catch (e) {
+      console.log(e);
+      navigate("/joinGame");
+    }
+  }, [joinGameData]);
 
-  const oponents = gameState.players.map((player, i) => (
-    <PlayerAvatar player={player} key={`oponent-${i}`} />
-  ));
-
-  const blackCard =
-    gameState.currentRound === undefined ? null : (
-      <BlackCardDisplay card={gameState.currentRound.blackCard} />
-    );
-
-  return (
-    <div className="GameScreen">
-      <div id="oponents">
-        {oponents}
-        <button onClick={() => gameServer.drawCard()}>Draw</button>
-      </div>
-      <div id="table">{blackCard}</div>
-      <PlayerHand hand={gameState.userHand} />
-    </div>
+  return gameReady ? (
+    <GameDisplay id={gameId} playerName={playerName} />
+  ) : (
+    <h2>Loading...</h2>
   );
 }

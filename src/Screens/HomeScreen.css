@@ -1,0 +1,25 @@
+.HomeScreen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.HomeScreen a {
+  text-decoration: none;
+  color: white;
+}
+
+#HomeScreenContentContainer {
+  width: 70vw;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#HomeScreenContentContainer button {
+  width: 200px;
+}

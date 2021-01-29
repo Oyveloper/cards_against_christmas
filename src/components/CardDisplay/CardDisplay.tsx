@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, BlackCard } from "../../types";
+import { Card } from "../../types";
 
 import "./CardDisplay.css";
 
