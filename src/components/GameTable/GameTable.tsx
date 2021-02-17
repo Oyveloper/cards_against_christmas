@@ -8,6 +8,9 @@ export type GameTableProps = {
   playedCards: JSX.Element[] | null;
 };
 
+/**
+ * Displays the main table of the game. This is where the black card and played cards are shown
+ */
 export default function GameTable({
   isJudge,
   blackCard,

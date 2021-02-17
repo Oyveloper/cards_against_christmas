@@ -13,6 +13,11 @@ type GameScreenProps = {
   playerName: string;
 };
 
+/**
+ * This is the main game display
+ * @param id - the id for the game you want to play
+ * @param playerName - the name of the local player
+ */
 export default function GameDisplay({ id, playerName }: GameScreenProps) {
   const [gameServer, gameState] = useGameServer(id, playerName);
   const [isHost, setIsHost] = useState(false);

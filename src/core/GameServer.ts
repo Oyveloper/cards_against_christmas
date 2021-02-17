@@ -21,6 +21,10 @@ export enum GameServerActions {
   GAME_UPDATE,
 }
 
+/**
+ * The GameServer class is used for all interaction with the game server
+ * You get your instance of this through @see useGameServer
+ */
 export class GameServer {
   id: string;
   dispatch: React.Dispatch<{
@@ -168,6 +172,14 @@ function gameStateReducer(
   return { ...state, ...action.data };
 }
 
+/**
+ * Custom hook for connecting and interacting with a game
+ * It will return the current gameState, and a reference to the gameServer (@see GameServer)
+ * so that you can send messages to the server
+ *
+ * @param id - the id of the game you wish to join
+ * @param playerName - your playername
+ */
 export default function useGameServer(
   id: string,
   playerName: string
