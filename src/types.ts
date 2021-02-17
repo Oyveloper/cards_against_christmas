@@ -15,6 +15,9 @@ export interface Round {
   num: number;
   judge: Player;
   blackCard: BlackCard;
+  winner: Player;
+  winnerCard: Card;
+  playedCards: { [playerName: string]: Card };
 }
 
 export interface Card {
@@ -46,9 +49,20 @@ export type GameUpdate = {
   players: Player[];
   rounds: Round[];
   currentRound: Round;
+  type: String;
 };
 
 export type JoinGameData = {
   gameId: string;
   playerName: string;
 };
+
+export class ClientMessage {
+  playerName: string;
+  cardId: string;
+
+  constructor(playerName: string = "", cardId: string = "") {
+    this.playerName = playerName;
+    this.cardId = cardId;
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { RouteComponentProps, navigate } from "@reach/router";
-import { gameExists, isPlayerNameTaken } from "../core/GameInfo";
-import { JoinGameContext } from "../App";
+import { gameExists, isPlayerNameTaken } from "../../core/GameInfo";
+import { JoinGameContext } from "../../App";
 
 export default function JoinGameScreen(props: RouteComponentProps) {
   const [playerName, setPlayerName] = useState<string>("");

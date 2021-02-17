@@ -7,21 +7,38 @@ import "./GameDisplayHeader.css";
 type GameDisplayHeaderProps = {
   players: Player[];
   id: string;
-  isHost: boolean;
+  showStartGame: boolean;
+  showNextRound: boolean;
   startGame: () => void;
+  judgeName: string;
 };
 
 export default function GameDisplayHeader({
   players,
   id,
-  isHost,
+  showStartGame,
+  showNextRound,
+  startGame,
+  judgeName,
 }: GameDisplayHeaderProps) {
   const opponentList = players.map((player, i) => (
-    <PlayerAvatar player={player} key={`opponent-${i}`} />
+    <PlayerAvatar
+      player={player}
+      isJudge={player.name === judgeName}
+      key={`opponent-${i}`}
+    />
   ));
 
-  const startButton = isHost ? (
-    <button className="main">Start game</button>
+  const startButton = showStartGame ? (
+    <button className="main" onClick={startGame}>
+      Start game
+    </button>
+  ) : null;
+
+  const nextRoundButton = showNextRound ? (
+    <button className="main" onClick={startGame}>
+      New round
+    </button>
   ) : null;
 
   const gameIdDisplay = <h3>Game id: {id}</h3>;
@@ -30,6 +47,7 @@ export default function GameDisplayHeader({
     <div className="GameDisplayHeader">
       <div id="oponents">{opponentList}</div>
       {startButton}
+      {nextRoundButton}
       {gameIdDisplay}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { RouteComponentProps, useNavigate } from "@reach/router";
-import { createGame } from "../core/GameInfo";
-import { JoinGameContext } from "../App";
+import { createGame } from "../../core/GameInfo";
+import { JoinGameContext } from "../../App";
 
 export default function CreateGameScreen(props: RouteComponentProps) {
   const [playerName, setPlayerName] = useState<string>("");

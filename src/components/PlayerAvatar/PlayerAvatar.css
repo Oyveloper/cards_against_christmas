@@ -5,6 +5,6 @@
   margin: 0 20px;
 }
 
-.PlayerAvatarActive {
-  color: #98a
+.PlayerAvatar.judge {
+  color: rgb(70, 227, 211)
 }

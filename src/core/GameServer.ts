@@ -1,6 +1,12 @@
 import { CompatClient, Stomp } from "@stomp/stompjs";
 import { useEffect, useReducer, useState } from "react";
-import { Card, GameServerResponse, GameState, GameUpdate } from "../types";
+import {
+  Card,
+  ClientMessage,
+  GameServerResponse,
+  GameState,
+  GameUpdate,
+} from "../types";
 import SockJS from "sockjs-client";
 
 export enum GameServerActions {
@@ -25,6 +31,7 @@ export class GameServer {
   serverURL: string = "http://localhost:8080/ws";
   stompClient: CompatClient | undefined;
   playerName: string;
+  isJoined: boolean = false;
 
   constructor(
     id: string,
@@ -55,7 +62,7 @@ export class GameServer {
         this.stompClient.send(
           `/app/joinGame/${this.id}`,
           undefined,
-          this.playerName
+          JSON.stringify(new ClientMessage(this.playerName, ""))
         );
       }
     });
@@ -63,44 +70,95 @@ export class GameServer {
 
   onGameInfo(rawResponse: any) {
     let response: GameServerResponse = JSON.parse(rawResponse.body);
+    console.log(response);
 
     if (response.status === "OK") {
       let gameUpdate: GameUpdate = response.data;
       console.log(gameUpdate);
 
+      switch (gameUpdate.type) {
+        case "join":
+          if (!this.isJoined) {
+            this.isJoined = true;
+            this.drawHand();
+          }
+          break;
+
+        case "newRound":
+          break;
+
+        case "cardPlayed":
+        case "cardChosen":
+        default:
+          break;
+      }
+
       this.dispatch({
         type: GameServerActions.GAME_UPDATE,
-        data: {
-          players: gameUpdate.players,
-          rounds: gameUpdate.rounds,
-          currentRound: gameUpdate.currentRound,
-        },
+        data: gameUpdate,
       });
     }
   }
 
-  playCard(card: Card) {}
-
-  chooseCard(card: Card) {}
-
-  drawCard(currentHand: Card[]) {
+  playCard(card: Card, currentHand: Card[]) {
+    this.stompClient?.send(
+      `/app/${this.id}/playCard`,
+      undefined,
+      JSON.stringify(new ClientMessage(this.playerName, card.id))
+    );
+    const hand = currentHand.filter((c) => c.id !== card.id);
     this.dispatch({
-      type: GameServerActions.DRAW_CARD,
-      data: { userHand: [...currentHand, { text: "mer", id: "qwe" }] },
+      type: GameServerActions.CARD_PLAYED,
+      data: {
+        userHand: [...hand],
+      },
     });
+
+    this.drawCard(hand);
   }
 
-  onNewRound() {}
+  chooseCard(card: Card) {
+    this.stompClient?.send(
+      `/app/${this.id}/chooseWinnerCard`,
+      undefined,
+      JSON.stringify(new ClientMessage("", card.id))
+    );
+  }
 
-  onPlayersChange() {}
+  drawCard(currentHand: Card[]) {
+    fetch(`http://localhost:8080/drawCard?gameId=${this.id}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        let message = response as GameServerResponse;
+        let cards = message.data.cards;
+        this.dispatch({
+          type: GameServerActions.DRAW_CARD,
+          data: { userHand: [...currentHand, ...cards] },
+        });
+      });
+  }
 
-  onRoundWon() {}
+  drawHand() {
+    fetch(`http://localhost:8080/drawHand?gameId=${this.id}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        let message = response as GameServerResponse;
+        let cards = message.data.cards;
+        this.dispatch({
+          type: GameServerActions.DRAW_CARD,
+          data: { userHand: cards },
+        });
+      });
+  }
 
-  onCardPlayed() {}
-
-  onGameStart() {}
-
-  onGameOver() {}
+  newRound() {
+    console.log("starting a new round");
+    this.stompClient?.send(`/app/${this.id}/newRound`);
+  }
 }
 
 function gameStateReducer(

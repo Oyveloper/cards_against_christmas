@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./App.css";
 
-import GameScreen from "./Screens/GameScreen";
+import GameScreen from "./Screens/GameScreen/GameScreen";
 
 import { Router } from "@reach/router";
-import HomeScreen from "./Screens/HomeScreen";
-import CreateGameScreen from "./Screens/CreateGameScreen";
-import JoinGameScreen from "./Screens/JoinGameScreen";
+import HomeScreen from "./Screens/HomeScreen/HomeScreen";
+import CreateGameScreen from "./Screens/CreateGameScreen/CreateGameScreen";
+import JoinGameScreen from "./Screens/JoinGameScreen/JoinGameScreen";
 import { JoinGameData } from "./types";
 
 const defaultJoinGameData: JoinGameData = {

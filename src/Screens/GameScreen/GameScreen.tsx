@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { navigate, RouteComponentProps } from "@reach/router";
 
 import "./GameScreen.css";
-import GameDisplay from "../components/GameDisplay/GameDisplay";
-import { JoinGameContext } from "../App";
+import GameDisplay from "../../components/GameDisplay/GameDisplay";
+import { JoinGameContext } from "../../App";
 
 export default function GameScreen(props: RouteComponentProps) {
   const [playerName, setPlayerName] = useState<string>("");
@@ -23,7 +23,7 @@ export default function GameScreen(props: RouteComponentProps) {
       setGameReady(true);
     } catch (e) {
       console.log(e);
-      navigate("/joinGame");
+      navigate("/");
     }
   }, [joinGameData]);
 

@@ -6,11 +6,18 @@ import "./PlayerHand.css";
 
 type PlayerHandProps = {
   hand: Card[];
+  playCard: (card: Card) => void;
 };
 
-export default function PlayerHand({ hand }: PlayerHandProps) {
+export default function PlayerHand({ hand, playCard }: PlayerHandProps) {
   const playerHand = hand.map((card, i) => (
-    <WhiteCardDisplay card={card} key={`hand-card-${i}`} />
+    <WhiteCardDisplay
+      card={card}
+      key={`hand-card-${i}`}
+      onClick={(e) => {
+        playCard(card);
+      }}
+    />
   ));
 
   return (

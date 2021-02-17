@@ -1,0 +1,45 @@
+#table {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#table-cards-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#table-played {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+#table-played .card {
+  margin-right: 10px;
+}
+
+#blackCard-container {
+  display: flex;
+  justify-content: center;
+}
+
+#table-played .card:hover {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+}
+
+@media screen and (max-height: 780px) {
+  #table-cards-container {
+    flex-direction: row;
+  }
+  #table-played {
+    margin-top: 0;
+    margin-left: 20px;
+  }
+}
