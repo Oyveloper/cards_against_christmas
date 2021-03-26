@@ -21,6 +21,9 @@ export enum GameServerActions {
   GAME_UPDATE,
 }
 
+const baseURL =
+  process.env.NODE_ENV === "development" ? "localhost:8080/" : "/api/";
+
 /**
  * The GameServer class is used for all interaction with the game server
  * You get your instance of this through @see useGameServer
@@ -32,7 +35,7 @@ export class GameServer {
     data: object;
   }>;
 
-  serverURL: string = "http://localhost:8080/ws";
+  serverURL: string = `http://${baseURL}/ws`;
   stompClient: CompatClient | undefined;
   playerName: string;
   isJoined: boolean = false;
@@ -130,7 +133,7 @@ export class GameServer {
   }
 
   drawCard(currentHand: Card[]) {
-    fetch(`http://localhost:8080/drawCard?gameId=${this.id}`, {
+    fetch(`http://${baseUrl}/drawCard?gameId=${this.id}`, {
       method: "GET",
     })
       .then((response) => response.json())
@@ -145,7 +148,7 @@ export class GameServer {
   }
 
   drawHand() {
-    fetch(`http://localhost:8080/drawHand?gameId=${this.id}`, {
+    fetch(`http://${baseUrl}/drawHand?gameId=${this.id}`, {
       method: "GET",
     })
       .then((response) => response.json())
