@@ -1,11 +1,12 @@
 import { GameServerResponse } from "../types";
+import baseURL from "url";
 
 /**
  * asks the server wether a game exists or not
  * @param id - the id of the game
  */
 export async function gameExists(id: string): Promise<boolean> {
-  return fetch(`http://localhost:8080/gameExists?gameId=${id}`)
+  return fetch(`${baseURL}/gameExists?gameId=${id}`)
     .then((result) => result.json())
     .then((result) => {
       let response: GameServerResponse = result;
@@ -25,7 +26,7 @@ export async function isPlayerNameTaken(
   gameId: string
 ): Promise<boolean> {
   return fetch(
-    `http://localhost:8080/isPlayerNameTaken?playerName=${playerName}&gameId=${gameId}`
+    `${baseURL}/isPlayerNameTaken?playerName=${playerName}&gameId=${gameId}`
   )
     .then((result) => result.json())
     .then((result) => {
@@ -41,7 +42,7 @@ export async function isPlayerNameTaken(
  * @param hostPlayerName - the playerName chosen by the host
  */
 export async function createGame(): Promise<string> {
-  return fetch(`http://localhost:8080/createGame`, {
+  return fetch(`${baseURL}/createGame`, {
     method: "POST",
   })
     .then((result) => result.json())

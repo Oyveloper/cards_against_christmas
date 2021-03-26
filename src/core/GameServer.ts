@@ -7,6 +7,9 @@ import {
   GameState,
   GameUpdate,
 } from "../types";
+
+import baseURL from "url";
+
 import SockJS from "sockjs-client";
 
 export enum GameServerActions {
@@ -21,9 +24,7 @@ export enum GameServerActions {
   GAME_UPDATE,
 }
 
-const baseURL =
-  process.env.NODE_ENV === "development" ? "localhost:8080/" : "/api/";
-
+console.log(baseURL);
 /**
  * The GameServer class is used for all interaction with the game server
  * You get your instance of this through @see useGameServer
@@ -35,7 +36,7 @@ export class GameServer {
     data: object;
   }>;
 
-  serverURL: string = `http://${baseURL}/ws`;
+  serverURL: string = `${baseURL}/ws`;
   stompClient: CompatClient | undefined;
   playerName: string;
   isJoined: boolean = false;
@@ -133,7 +134,7 @@ export class GameServer {
   }
 
   drawCard(currentHand: Card[]) {
-    fetch(`http://${baseURL}/drawCard?gameId=${this.id}`, {
+    fetch(`${baseURL}/drawCard?gameId=${this.id}`, {
       method: "GET",
     })
       .then((response) => response.json())
@@ -148,7 +149,7 @@ export class GameServer {
   }
 
   drawHand() {
-    fetch(`http://${baseURL}/drawHand?gameId=${this.id}`, {
+    fetch(`${baseURL}/drawHand?gameId=${this.id}`, {
       method: "GET",
     })
       .then((response) => response.json())
