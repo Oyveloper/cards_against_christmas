@@ -133,7 +133,7 @@ export class GameServer {
   }
 
   drawCard(currentHand: Card[]) {
-    fetch(`http://${baseUrl}/drawCard?gameId=${this.id}`, {
+    fetch(`http://${baseURL}/drawCard?gameId=${this.id}`, {
       method: "GET",
     })
       .then((response) => response.json())
@@ -148,7 +148,7 @@ export class GameServer {
   }
 
   drawHand() {
-    fetch(`http://${baseUrl}/drawHand?gameId=${this.id}`, {
+    fetch(`http://${baseURL}/drawHand?gameId=${this.id}`, {
       method: "GET",
     })
       .then((response) => response.json())
