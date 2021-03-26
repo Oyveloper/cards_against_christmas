@@ -8,7 +8,7 @@ import {
   GameUpdate,
 } from "../types";
 
-import baseURL from "url";
+import baseURL from "./url_config";
 
 import SockJS from "sockjs-client";
 

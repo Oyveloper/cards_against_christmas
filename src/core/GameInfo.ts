@@ -1,5 +1,5 @@
 import { GameServerResponse } from "../types";
-import baseURL from "url";
+import baseURL from "./url_config";
 
 /**
  * asks the server wether a game exists or not
